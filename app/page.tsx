@@ -16,7 +16,7 @@ import CircleNodeComponent from "./components/circle-node";
 import Sidebar from "./components/sidebar/Sidebar";
 import { LoadedFile, CircleNodeData } from "./types/tree";
 import { buildGraphData, getSearchHighlightIds, validateJsonTree } from "./utils/tree-parser";
-import { getLayoutedElements } from "./utils/layout";
+import { getLayoutedElements } from "./utils/graph-layout";
 
 const nodeTypes: NodeTypes = {
   circleNode: CircleNodeComponent,
