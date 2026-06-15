@@ -1,15 +1,8 @@
 import React, { memo } from 'react';
 import { Handle, Position } from '@xyflow/react';
 import { formatBits } from '../utils/tree-parser';
-
-export type CircleNodeData = {
-  label: string;
-  hit_cnt: number;
-  parent_hit_cnt?: number;
-  byte_val?: number;
-  isSearchPath?: boolean;
-  orientation?: 'LR' | 'TB';
-};
+import { getHeatmapColor } from '../utils/colors';
+import { CircleNodeData } from '../types/tree';
 
 interface CircleNodeProps {
   data: CircleNodeData;
@@ -28,20 +21,32 @@ function CircleNodeComponent({
   const sourcePos = isLR ? Position.Right : Position.Bottom;
 
   // High-contrast, subtle borders, bright text
-  let borderStyle = 'border-zinc-300 dark:border-zinc-800 bg-white dark:bg-black text-zinc-900 dark:text-white hover:border-zinc-400 dark:hover:border-zinc-500 shadow-sm';
-  if (isRoot) {
-    borderStyle = 'border-cyan-300 dark:border-cyan-800 bg-cyan-50 dark:bg-[#001122] text-cyan-700 dark:text-cyan-400 font-bold hover:border-cyan-400 dark:hover:border-cyan-500 shadow-md';
-  } else if (data.isSearchPath) {
-    borderStyle = 'border-orange-300 dark:border-orange-700 bg-orange-50 dark:bg-[#221100] text-orange-700 dark:text-orange-400 font-bold hover:border-orange-400 dark:hover:border-orange-400 shadow-md';
+  let borderStyle = '';
+  let customStyle: React.CSSProperties = {};
+
+  if (data.isHeatmap && data.root_hit_cnt && data.root_hit_cnt > 0) {
+    const ratio = data.hit_cnt / data.root_hit_cnt;
+    const { bg, text } = getHeatmapColor(ratio, data.heatmapPalette || 'rocket');
+    customStyle = { backgroundColor: bg, color: text, borderColor: text };
+    borderStyle = 'shadow-md hover:border-orange-500';
+  } else {
+    if (isRoot) {
+      borderStyle = 'border-cyan-300 dark:border-cyan-800 bg-cyan-50 dark:bg-[#001122] text-cyan-700 dark:text-cyan-400 font-bold hover:border-cyan-400 dark:hover:border-cyan-500 shadow-md';
+    } else if (data.isSearchPath) {
+      borderStyle = 'border-orange-300 dark:border-orange-700 bg-orange-50 dark:bg-[#221100] text-orange-700 dark:text-orange-400 font-bold hover:border-orange-400 dark:hover:border-orange-400 shadow-md';
+    } else {
+      borderStyle = 'border-zinc-300 dark:border-zinc-800 bg-white dark:bg-black text-zinc-900 dark:text-white hover:border-zinc-400 dark:hover:border-zinc-500 shadow-sm';
+    }
   }
 
   if (selected) {
-    borderStyle = 'border-orange-500 ring-2 ring-orange-500/50 bg-orange-100 dark:bg-[#1a0f0a] text-orange-900 dark:text-white font-bold shadow-lg';
+    borderStyle += ' ring-2 ring-orange-500/50 shadow-lg';
   }
 
   return (
     <div
       className={`relative flex items-center justify-center rounded-full border-2 w-16 h-16 transition-colors group hover:z-50 ${borderStyle}`}
+      style={customStyle}
     >
       {/* Target Handle (Input) - not needed for root */}
       {!isRoot && (

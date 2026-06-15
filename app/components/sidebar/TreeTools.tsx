@@ -7,6 +7,10 @@ interface TreeToolsProps {
   setOrientation: (o: 'LR' | 'TB') => void;
   searchQuery: string;
   setSearchQuery: (query: string) => void;
+  isHeatmap: boolean;
+  setIsHeatmap: (b: boolean) => void;
+  heatmapPalette: string;
+  setHeatmapPalette: (p: string) => void;
 }
 
 export default function TreeTools({
@@ -16,6 +20,10 @@ export default function TreeTools({
   setOrientation,
   searchQuery,
   setSearchQuery,
+  isHeatmap,
+  setIsHeatmap,
+  heatmapPalette,
+  setHeatmapPalette,
 }: TreeToolsProps) {
   return (
     <div className="flex flex-col h-full divide-y divide-zinc-200 dark:divide-zinc-800 overflow-y-auto">
@@ -45,6 +53,52 @@ export default function TreeTools({
         <div className="text-xs text-zinc-500 mt-2 leading-relaxed">
           Adjust the maximum prologue length shown in the tree to reduce clutter.
         </div>
+      </div>
+
+      {/* Heatmap Settings */}
+      <div className="p-5">
+        <div className="text-sm font-bold text-zinc-600 dark:text-zinc-400 tracking-wider uppercase mb-3 flex justify-between items-center">
+          <div>HEATMAP (FREQUENCY)</div>
+          <div className="flex border border-zinc-300 dark:border-zinc-700 rounded-none overflow-hidden text-xs font-bold">
+            <button
+              onClick={() => setIsHeatmap(true)}
+              className={`px-3 py-1 transition-colors ${
+                isHeatmap
+                  ? "bg-orange-50 dark:bg-[#1a0f0a] text-orange-600 dark:text-white"
+                  : "bg-white dark:bg-[#0c0c0e] text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-300"
+              }`}
+            >
+              ON
+            </button>
+            <button
+              onClick={() => setIsHeatmap(false)}
+              className={`px-3 py-1 transition-colors border-l border-zinc-300 dark:border-zinc-700 ${
+                !isHeatmap
+                  ? "bg-zinc-200 dark:bg-zinc-800 text-zinc-800 dark:text-white"
+                  : "bg-white dark:bg-[#0c0c0e] text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-300"
+              }`}
+            >
+              OFF
+            </button>
+          </div>
+        </div>
+        
+        {isHeatmap && (
+          <div className="mt-4">
+            <div className="text-xs font-bold text-zinc-500 dark:text-zinc-500 tracking-wider uppercase mb-2">
+              COLOR PALETTE
+            </div>
+            <select
+              value={heatmapPalette}
+              onChange={(e) => setHeatmapPalette(e.target.value)}
+              className="w-full bg-white dark:bg-[#0c0c0e] border border-zinc-200 dark:border-zinc-700 focus:border-orange-500 outline-none text-sm px-2 py-2 text-zinc-900 dark:text-white font-mono rounded-none transition-colors"
+            >
+              <option value="rocket">Rocket (Seaborn)</option>
+              <option value="mako">Mako (Seaborn)</option>
+              <option value="viridis">Viridis (Matplotlib)</option>
+            </select>
+          </div>
+        )}
       </div>
 
       {/* Visual settings */}

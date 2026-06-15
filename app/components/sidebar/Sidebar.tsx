@@ -27,6 +27,10 @@ interface SidebarProps {
   setSearchQuery: (query: string) => void;
   selectedNode: Node<CircleNodeData> | null;
   activeFile: LoadedFile | undefined;
+  isHeatmap: boolean;
+  setIsHeatmap: (b: boolean) => void;
+  heatmapPalette: string;
+  setHeatmapPalette: (p: string) => void;
 }
 
 export default function Sidebar(props: SidebarProps) {
@@ -93,6 +97,10 @@ export default function Sidebar(props: SidebarProps) {
             setOrientation={props.setOrientation}
             searchQuery={props.searchQuery}
             setSearchQuery={props.setSearchQuery}
+            isHeatmap={props.isHeatmap}
+            setIsHeatmap={props.setIsHeatmap}
+            heatmapPalette={props.heatmapPalette}
+            setHeatmapPalette={props.setHeatmapPalette}
           />
         )}
         {activeTab === 'INSPECT' && (

@@ -95,11 +95,13 @@ export const buildGraphData = (
   searchPathIds: Set<string> = new Set(),
   currentDepth: number = 0,
   maxDepth: number = 100,
-  parent_hit_cnt?: number
+  parent_hit_cnt?: number,
+  root_hit_cnt?: number
 ) => {
   if (currentDepth > maxDepth) return;
 
   const isRoot = node.byte_val === undefined;
+  const currentRootHitCnt = root_hit_cnt ?? node.hit_cnt;
   const currentPath = isRoot ? "root" : `${parentPath}-${formatByte(node.byte_val!)}`;
   const label = isRoot ? "Root" : `0x${formatByte(node.byte_val!)}`;
   const isSearchPath = searchPathIds.has(currentPath);
@@ -111,6 +113,7 @@ export const buildGraphData = (
       label,
       hit_cnt: node.hit_cnt,
       parent_hit_cnt,
+      root_hit_cnt: currentRootHitCnt,
       byte_val: node.byte_val,
       isSearchPath,
     },
@@ -129,7 +132,7 @@ export const buildGraphData = (
 
   if (node.children) {
     for (const child of node.children) {
-      buildGraphData(child, currentPath, nodesList, edgesList, searchPathIds, currentDepth + 1, maxDepth, node.hit_cnt);
+      buildGraphData(child, currentPath, nodesList, edgesList, searchPathIds, currentDepth + 1, maxDepth, node.hit_cnt, currentRootHitCnt);
     }
   }
 };

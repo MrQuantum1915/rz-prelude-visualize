@@ -14,6 +14,7 @@ import {
 } from "@xyflow/react";
 import CircleNodeComponent from "./components/circle-node";
 import Sidebar from "./components/sidebar/Sidebar";
+import HeatmapLegend from "./components/HeatmapLegend";
 import { LoadedFile, CircleNodeData } from "./types/tree";
 import { buildGraphData, getSearchHighlightIds, validateJsonTree } from "./utils/tree-parser";
 import { getLayoutedElements } from "./utils/graph-layout";
@@ -42,6 +43,8 @@ export default function Home() {
   const [isDragging, setIsDragging] = useState<boolean>(false);
   const [maxDepth, setMaxDepth] = useState<number>(20);
   const [isDark, setIsDark] = useState<boolean>(false);
+  const [isHeatmap, setIsHeatmap] = useState<boolean>(true);
+  const [heatmapPalette, setHeatmapPalette] = useState<string>("rocket");
 
   // Retro CLI Loading character effect
   useEffect(() => {
@@ -103,7 +106,16 @@ export default function Home() {
           orientation
         );
 
-        setNodes(layoutedNodes);
+        const heatmapNodes = layoutedNodes.map((node) => ({
+          ...node,
+          data: {
+            ...node.data,
+            isHeatmap,
+            heatmapPalette,
+          },
+        }));
+
+        setNodes(heatmapNodes);
         setEdges(layoutedEdges);
         setError(null);
 
@@ -124,7 +136,7 @@ export default function Home() {
       clearTimeout(tLoading);
       clearTimeout(t);
     };
-  }, [selectedFileId, files, orientation, searchQuery, maxDepth, setNodes, setEdges]);
+  }, [selectedFileId, files, orientation, searchQuery, maxDepth, isHeatmap, heatmapPalette, setNodes, setEdges]);
 
   const processFiles = async (filesList: File[]) => {
     const newFiles: LoadedFile[] = [];
@@ -296,9 +308,13 @@ export default function Home() {
           setSearchQuery={setSearchQuery}
           selectedNode={selectedNode}
           activeFile={activeFile}
+          isHeatmap={isHeatmap}
+          setIsHeatmap={setIsHeatmap}
+          heatmapPalette={heatmapPalette}
+          setHeatmapPalette={setHeatmapPalette}
         />
 
-        {/* Right Flow Graph Area */}
+        {/* Main Content Area */}
         <main className="flex-1 h-full bg-white dark:bg-zinc-950 relative transition-colors">
           {files.length === 0 ? (
             <div className="absolute inset-0 flex flex-col items-center justify-center text-center p-6 bg-white dark:bg-zinc-950 z-10 font-mono border border-transparent transition-colors">
@@ -318,7 +334,8 @@ export default function Home() {
           )}
 
           {/* React Flow Container */}
-          <div className="w-full h-full">
+          <div className="w-full h-full relative">
+            {isHeatmap && <HeatmapLegend palette={heatmapPalette} isDark={isDark} />}
             <ReactFlow
               nodes={nodes}
               edges={edges}

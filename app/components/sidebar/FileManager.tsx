@@ -70,6 +70,12 @@ export default function FileManager({
           />
         </div>
 
+        {/* Performance Tip */}
+        <div className="mt-4 p-3 bg-blue-50 dark:bg-[#0a1526] border border-blue-200 dark:border-blue-900 text-blue-700 dark:text-blue-300 text-xs leading-relaxed rounded-none font-sans">
+          <span className="font-bold mr-1">TIP:</span>
+          If your JSON tree is very large, consider reducing the maximum <b>Tree Depth</b> in the Tools tab to prevent long rendering times.
+        </div>
+
         {/* Visual Validation Error Alert */}
         {error && (
           <div className="mt-4 p-4 bg-red-50 dark:bg-red-950/40 border border-red-200 dark:border-red-900 text-red-600 dark:text-red-300 text-sm break-all leading-relaxed rounded-none font-sans font-medium">

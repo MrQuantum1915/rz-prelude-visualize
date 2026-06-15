@@ -14,7 +14,10 @@ export type CircleNodeData = {
   label: string;
   hit_cnt: number;
   parent_hit_cnt?: number;
+  root_hit_cnt?: number;
   byte_val?: number;
   isSearchPath?: boolean;
   orientation?: 'LR' | 'TB';
+  isHeatmap?: boolean;
+  heatmapPalette?: string;
 };
