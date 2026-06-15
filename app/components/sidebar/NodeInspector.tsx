@@ -29,6 +29,12 @@ export default function NodeInspector({ selectedNode, activeFile }: NodeInspecto
     parentPercentage = ((selectedNode.data.hit_cnt / selectedNode.data.parent_hit_cnt) * 100).toFixed(2);
   }
 
+  // Compute percentage of root node's hits
+  let rootPercentage = null;
+  if (!isRoot && selectedNode.data.root_hit_cnt && selectedNode.data.root_hit_cnt > 0) {
+    rootPercentage = ((selectedNode.data.hit_cnt / selectedNode.data.root_hit_cnt) * 100).toFixed(2);
+  }
+
   return (
     <div className="flex flex-col h-full divide-y divide-zinc-200 dark:divide-zinc-800 overflow-y-auto bg-white dark:bg-[#09090b]">
       <div className="p-5">
@@ -73,6 +79,14 @@ export default function NodeInspector({ selectedNode, activeFile }: NodeInspecto
               <div className="text-xs text-zinc-500 mb-1">% OF PARENT TRAFFIC</div>
               <div className="text-base font-mono font-bold text-orange-600 dark:text-orange-400">
                 {parentPercentage}%
+              </div>
+            </div>
+          )}
+          {!isRoot && rootPercentage !== null && (
+            <div>
+              <div className="text-xs text-zinc-500 mb-1">% OF ROOT TRAFFIC</div>
+              <div className="text-base font-mono font-bold text-cyan-600 dark:text-cyan-400">
+                {rootPercentage}%
               </div>
             </div>
           )}
