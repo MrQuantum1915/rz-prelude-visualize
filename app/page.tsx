@@ -342,6 +342,8 @@ export default function Home() {
                 }}
                 nodeColor={isDark ? "#27272a" : "#d4d4d8"}
                 maskColor={isDark ? "rgba(0, 0, 0, 0.6)" : "rgba(255, 255, 255, 0.6)"}
+                maskStrokeColor={isDark ? "#f97316" : "#ea580c"}
+                maskStrokeWidth={2}
               />
             </ReactFlow>
           </div>
