@@ -14,7 +14,8 @@ export default function HelpModal({ isOpen, onClose, isDark }: HelpModalProps) {
       <div className={`relative w-full max-w-2xl max-h-[85vh] overflow-y-auto border shadow-2xl p-8 rounded-none ${isDark ? 'bg-[#0c0c0e] border-zinc-700 text-zinc-300' : 'bg-white border-zinc-300 text-zinc-700'}`}>
         <button 
           onClick={onClose}
-          className="absolute top-4 right-4 text-2xl font-sans hover:text-orange-500 transition-colors"
+          title="Close Guide"
+          className="font-bold text-xl absolute top-6 right-4 text-zinc-400 dark:text-zinc-500 hover:text-red-500 dark:hover:text-red-400 px-2 py-1 text-sm hover:bg-zinc-50 dark:hover:bg-zinc-900 border border-transparent hover:border-red-200 dark:hover:border-red-900/60 rounded-none transition-all font-sans cursor-pointer"
         >
           ✕
         </button>
